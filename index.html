@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Adam Chrapkowski - Dokładna metoda Semantic Tableaux</title>
+		<style>
+			body {
+				font-family: "DejaVu Sans";
+				font-size: 18px;
+			}
+
+			.buttons {
+				margin: 15px 0;
+			}
+
+			.editor-button {
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				line-height: 20px;
+				text-align: center;
+				border: 1px solid steelblue;
+				background: #ccf;
+				cursor: pointer;
+				color: steelblue;
+			}
+
+			.editor-button:hover {
+				cursor: pointer;
+				color: white;
+				background: steelblue;
+			}
+
+			td.r {
+				text-align: right;
+			}
+
+			td {
+				border: 1px solid #777;
+			}
+
+			tr:hover td {
+				background: #AAA;
+				cursor: pointer;
+			}
+
+			.registers {
+				border-spacing: 0;
+				border-collapse: collapse;
+				width: 98%;
+				list-style: none;
+				padding: 0;
+				margin: 0 auto;
+				table-layout: fixed;
+				font-size: 11px;
+			}
+
+			.registers td {
+				overflow: hidden;
+			}
+
+			#page {
+				width: 960px;
+				margin: 0 auto;
+				overflow: hidden;
+			}
+
+			#content {
+				width: 600px;
+				float: left;
+			}
+
+			img {
+				display: none;
+			}
+
+			img.show {
+				display: block;
+			}
+
+			svg {
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 600px;
+				height: 600px;
+			}
+
+			#result {
+				color: steelblue;
+			}
+
+			#result.tautology {
+				color: #9E4036;
+			}
+
+			.node circle {
+				fill: #ccf;
+				stroke: steelblue;
+				stroke-width: 1px;
+			}
+
+			.node {
+				font: 14px sans-serif;
+			}
+
+			.closed circle {
+				fill: #FF6C5B;
+				stroke: #9E4036;
+			}
+
+			.opened circle {
+				fill: #B5FF83;
+				stroke: #6B964D;
+			}
+
+			.link {
+				fill: none;
+				stroke: #aaa;
+				stroke-width: 1px;
+			}
+
+			#drawing {
+				float: left
+				margin: 0;
+				width: 600px;
+				height: 600px;
+				text-align: center;
+				position: relative;
+				overflow: auto;
+			}
+
+			#panel {
+				width: 340px;
+				height: 600px;
+				overflow: auto;
+				margin-left: 20px;
+				float: left;
+			}
+
+			input[type="text"]{
+				display: block;
+				width: 578px;
+				height: 15px;
+				padding: 10px;
+				border: 1px solid #888;
+			}
+
+			input[type="submit"]{
+				width: 100px;
+				height: 35px;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="page">
+			<div id="content">
+				<form>
+					<div class="buttons">
+						<span class="editor-button" title="(">(</span>
+						<span class="editor-button" title=")">)</span>
+						<span class="editor-button" title="not">&#x00AC;</span>
+						<span class="editor-button" title="imp">&#x21D2;</span>
+						<span class="editor-button" title="equ">&#x21D4;</span>
+						<span class="editor-button" title="and">&#x2227;</span>
+						<span class="editor-button" title="or">&#x2228;</span>
+					</div>
+					<input type="text"   id="formula-raw" value="p or (q and r) imp (p or q) and (p or r)" />
+					<input type="submit" id="formula-accept" value="zatwierdź" />
+					<button id="auto" href="#">automatycznie</button>
+					<button id="step" href="#">krokowo</button>
+					<label for="show-labels"><input id="show-labels" name="slabels" checked="checked" type="checkbox" />pokaż etykiety</label>
+				</form>
+				<div id="formula-formatted">
+				</div>
+				<div id="drawing">
+					<svg></svg>
+				</div><!-- / #drawing -->
+			</div>
+			<div id="panel">
+				<h2 id="result"></h2>
+				<h3>Rejestry</h3>
+				<table class="registers">
+					<thead>
+						<tr>
+							<th width="20%">w</th>
+							<th width="20%">g</th>
+							<th width="55%">e</th>
+							<th width="5%">typ</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div><!-- / #panel -->
+		</div><!-- / #page -->
+		<script src="jquery-2.0.3.min.js"></script>
+		<script src="d3.v3.min.js"></script>
+		<script src="jquery.selection.js"></script>
+		<script src="sem.js"></script>
+	</body>
+</html>
