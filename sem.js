@@ -98,6 +98,7 @@ Symbols = {
 	Equ  : "\u21D4",
 	Imp  : "\u21D2",
 	Not  : "\u00AC",
+	Xor  : "\u2295",
 	Alpha: "\u03B1",
 	Beta : "\u03B2"
 };
@@ -168,6 +169,10 @@ Lexer = function(o_input) {
 				break;
 
 				case TokenType.Equ:
+					res += Symbols.Equ;
+				break;
+
+				case TokenType.Xor:
 					res += Symbols.Equ;
 				break;
 
@@ -248,8 +253,9 @@ NodeType = {
 	Not: 2,
 	Imp: 3,
 	Equ: 4,
-	And: 5,
-	Or : 6
+	Xor: 5,
+	And: 6,
+	Or : 7
 };
 
 // Rules
@@ -259,11 +265,13 @@ NodeType = {
 // | not (A or B)  | not A         | not B         |
 // | not (A imp B) | A             | not B         |
 // | A equ B       | A imp B       | B imp A       |
+// | not (A xor B) | A imp B       | B imp A       |
 // ------------------------------------------------|
 // | not (A and B) | not A         | not B         |
 // | A or B        | A             | B             |
 // | B imp B       | not A         | B             |
 // | not (A equ B) | not (A imp B) | not (B imp A) |
+// | A xor B       | not (A imp B) | not (B imp A) |
 // -------------------------------------------------
 
 // class NodeExprId
@@ -315,6 +323,22 @@ NodeExprEqu = function(o_left, o_right) {
 		return (
 			"(" + this.left.print() +
 			" " + Symbols.Equ + " " +
+			this.right.print() + ")"
+		);
+	};
+};
+
+// class NodeExprXor
+NodeExprXor = function(o_left, o_right) {
+	this.type  = NodeType.Xor;
+	this.left  = o_left;
+	this.right = o_right;
+
+	// public function print()
+	NodeExprXor.prototype.print = function() {
+		return (
+			"(" + this.left.print() +
+			" " + Symbols.Xor + " " +
 			this.right.print() + ")"
 		);
 	};
